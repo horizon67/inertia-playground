@@ -1,11 +1,17 @@
 import React from "react";
-import { UseFormReturn } from "@inertiajs/react";
 import { TodoFormData } from "../../types";
 
+interface TodoFormHook {
+  data: TodoFormData;
+  setData: (key: keyof TodoFormData, value: string) => void;
+  handleSubmit: React.FormEventHandler;
+  processing: boolean;
+  reset: () => void;
+  errors: Partial<Record<keyof TodoFormData, string>>;
+}
+
 interface TodoFormProps {
-  formHook: UseFormReturn<TodoFormData> & {
-    handleSubmit: React.FormEventHandler;
-  };
+  formHook: TodoFormHook;
 }
 
 export default function TodoForm({ formHook }: TodoFormProps) {

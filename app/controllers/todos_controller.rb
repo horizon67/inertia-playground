@@ -13,7 +13,7 @@ class TodosController < ApplicationController
       redirect_to todos_path
     else
       render_index(
-        status: :unprocessable_entity,
+        status: :unprocessable_content,
         form: form_payload(todo_params),
         errors: todo.errors.to_hash(true)
       )
@@ -26,7 +26,7 @@ class TodosController < ApplicationController
       redirect_to todos_path
     else
       render_index(
-        status: :unprocessable_entity,
+        status: :unprocessable_content,
         form: form_payload(todo_params),
         errors: @todo.errors.to_hash(true),
         editing_id: @todo.id
