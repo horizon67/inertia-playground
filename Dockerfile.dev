@@ -1,0 +1,26 @@
+FROM ruby:3.4.7
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    BUN_INSTALL=/usr/local/bun
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      build-essential \
+      curl \
+      git \
+      libsqlite3-dev \
+      nodejs \
+      npm && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+RUN gem update --system && \
+    gem install bundler
+
+RUN curl -fsSL https://bun.sh/install | bash
+
+ENV PATH="/usr/local/bun/bin:${PATH}"
+
+WORKDIR /app
+
+CMD ["bin/dev"]
+

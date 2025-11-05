@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app:cached
+      - bundle:/app/vendor/bundle
+      - bun:/usr/local/bun
+    environment:
+      - BUNDLE_PATH=vendor/bundle
+      - BUNDLE_CONFIG=vendor/.bundle/config
+      - BUN_INSTALL=/usr/local/bun
+      - RAILS_ENV=development
+    ports:
+      - "3030:3000"
+    stdin_open: true
+    tty: true
+    command: bin/dev
+
+volumes:
+  bundle:
+  bun:
+
