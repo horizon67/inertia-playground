@@ -1,5 +1,19 @@
 import React from "react";
 import TodoItem from "./TodoItem";
+import { Todo, TodoFormData } from "../../types";
+import { FormEventHandler } from "react";
+
+interface TodoListProps {
+  todos: Todo[];
+  editingId: number | null;
+  editData: TodoFormData;
+  setEditData: React.Dispatch<React.SetStateAction<TodoFormData>>;
+  startEdit: (todo: Todo) => void;
+  cancelEdit: () => void;
+  submitEdit: FormEventHandler;
+  toggleCompleted: (todo: Todo) => void;
+  removeTodo: (todo: Todo) => void;
+}
 
 export default function TodoList({
   todos,
@@ -11,7 +25,7 @@ export default function TodoList({
   submitEdit,
   toggleCompleted,
   removeTodo,
-}) {
+}: TodoListProps) {
   return (
     <section className="space-y-4">
       <h2 className="text-lg font-medium text-slate-100">TODOリスト</h2>

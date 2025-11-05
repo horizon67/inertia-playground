@@ -1,5 +1,19 @@
 import React from "react";
 import { formatDate } from "../../Utils/formatDate";
+import { Todo, TodoFormData } from "../../types";
+import { FormEventHandler } from "react";
+
+interface TodoItemProps {
+  todo: Todo;
+  isEditing: boolean;
+  editData: TodoFormData;
+  setEditData: React.Dispatch<React.SetStateAction<TodoFormData>>;
+  startEdit: (todo: Todo) => void;
+  cancelEdit: () => void;
+  submitEdit: FormEventHandler;
+  toggleCompleted: (todo: Todo) => void;
+  removeTodo: (todo: Todo) => void;
+}
 
 export default function TodoItem({
   todo,
@@ -11,7 +25,7 @@ export default function TodoItem({
   submitEdit,
   toggleCompleted,
   removeTodo,
-}) {
+}: TodoItemProps) {
   return (
     <li className="rounded-xl border border-slate-700 bg-slate-800/70 p-4 shadow shadow-black/10">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">

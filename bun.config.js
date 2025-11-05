@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 const config = {
-  entrypoints: ["app/javascript/application.js"],
+  entrypoints: ["app/javascript/application.tsx"],
   outdir: path.join(process.cwd(), "app/assets/builds"),
   sourcemap: process.env.NODE_ENV === "production" ? "external" : "inline",
   target: "browser",

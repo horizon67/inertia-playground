@@ -7,9 +7,14 @@ import { useFlashMessage } from "../../Hooks/useFlashMessage";
 import TodoForm from "../../Components/Todos/TodoForm";
 import TodoList from "../../Components/Todos/TodoList";
 import FlashMessage from "../../Components/Common/FlashMessage";
+import { TodosIndexProps } from "../../types";
 
-export default function TodosIndex({ todos = [], form = null, editing_id = null }) {
-  const { app } = usePage().props;
+export default function TodosIndex({
+  todos = [],
+  form = null,
+  editing_id = null,
+}: TodosIndexProps) {
+  const { app } = usePage<TodosIndexProps>().props;
   const { notice, alert } = useFlashMessage();
   const formHook = useTodoForm(form);
   const { editingId, editData, setEditData, startEdit, cancelEdit, submitEdit } =
@@ -48,3 +53,4 @@ export default function TodosIndex({ todos = [], form = null, editing_id = null 
     </>
   );
 }
+

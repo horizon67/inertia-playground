@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function FlashMessage({ notice, alert }) {
+interface FlashMessageProps {
+  notice?: string;
+  alert?: string;
+}
+
+export default function FlashMessage({ notice, alert }: FlashMessageProps) {
   return (
     <>
       {notice && (

@@ -1,7 +1,8 @@
 import { router } from "@inertiajs/react";
+import { Todo } from "../types";
 
 export function useTodos() {
-  const toggleCompleted = (todo) => {
+  const toggleCompleted = (todo: Todo): void => {
     router.put(
       `/todos/${todo.id}`,
       { completed: !todo.completed },
@@ -9,7 +10,7 @@ export function useTodos() {
     );
   };
 
-  const removeTodo = (todo) => {
+  const removeTodo = (todo: Todo): void => {
     if (!confirm(`「${todo.title}」を削除しますか？`)) return;
 
     router.delete(`/todos/${todo.id}`, {

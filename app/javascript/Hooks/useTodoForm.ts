@@ -1,9 +1,10 @@
 import { useForm } from "@inertiajs/react";
-import { useEffect } from "react";
+import { useEffect, FormEventHandler } from "react";
+import { TodoFormData } from "../types";
 
-const emptyForm = { title: "", description: "" };
+const emptyForm: TodoFormData = { title: "", description: "" };
 
-export function useTodoForm(initialForm = null) {
+export function useTodoForm(initialForm: TodoFormData | null = null) {
   const defaults = initialForm ? { ...emptyForm, ...initialForm } : emptyForm;
   const form = useForm(defaults);
 
@@ -15,7 +16,7 @@ export function useTodoForm(initialForm = null) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaults.title, defaults.description]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     form.post("/todos", {
       preserveScroll: true,

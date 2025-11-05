@@ -1,11 +1,12 @@
 import { router } from "@inertiajs/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEventHandler } from "react";
+import { Todo, TodoFormData } from "../types";
 
-const emptyForm = { title: "", description: "" };
+const emptyForm: TodoFormData = { title: "", description: "" };
 
-export function useTodoEdit(serverEditingId, todos) {
-  const [editingId, setEditingId] = useState(serverEditingId);
-  const [editData, setEditData] = useState(emptyForm);
+export function useTodoEdit(serverEditingId: number | null, todos: Todo[]) {
+  const [editingId, setEditingId] = useState<number | null>(serverEditingId);
+  const [editData, setEditData] = useState<TodoFormData>(emptyForm);
 
   useEffect(() => {
     if (serverEditingId) {
@@ -20,7 +21,7 @@ export function useTodoEdit(serverEditingId, todos) {
     }
   }, [serverEditingId, todos]);
 
-  const startEdit = (todo) => {
+  const startEdit = (todo: Todo): void => {
     setEditingId(todo.id);
     setEditData({
       title: todo.title ?? "",
@@ -28,12 +29,12 @@ export function useTodoEdit(serverEditingId, todos) {
     });
   };
 
-  const cancelEdit = () => {
+  const cancelEdit = (): void => {
     setEditingId(null);
     setEditData(emptyForm);
   };
 
-  const submitEdit = (event) => {
+  const submitEdit: FormEventHandler = (event) => {
     event.preventDefault();
     if (!editingId) return;
 
