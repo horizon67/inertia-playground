@@ -1,6 +1,6 @@
 # Inertia Playground
 
-Inertia.js + React + Rails で構築したシンプルなTODOアプリケーションです。
+Inertia.js + React + Rails を使った実験的なサンプルアプリケーションです。複数の機能を試作しています。
 
 ## 技術スタック
 
@@ -31,19 +31,29 @@ docker-compose exec app bin/rails db:create db:migrate
 ## プロジェクト構成
 
 ```
-app/javascript/
-├── Pages/           # Inertia.jsのページコンポーネント
-├── Components/      # 再利用可能なReactコンポーネント
-├── Hooks/           # カスタムReactフック
-└── Utils/           # ユーティリティ関数
+app/
+├── controllers/        # Railsコントローラ（Inertiaレスポンスを返す）
+├── models/             # Active Recordモデル
+├── services/           # ビジネスロジックをまとめたサービス層
+├── views/              # レイアウト・共有ビュー（Inertiaと併用）
+└── javascript/
+    ├── Pages/          # Inertia.js ページコンポーネント
+    ├── Components/     # 再利用可能な React コンポーネント
+    ├── Hooks/          # フロントエンドのカスタムフック
+    └── Utils/          # ユーティリティ関数
+
+config/
+├── routes.rb           # InertiaページやAPIのルーティング定義
 ```
 
 ## 主な機能
 
 - TODOの作成・編集・削除
-- 完了状態の切り替え
-- バリデーションエラーの表示
-- フラッシュメッセージの表示
+- 完了状態の切り替え、バリデーションエラー・フラッシュメッセージ表示
+- レシート画像のアップロードと RubyLLM によるテキスト抽出
+- 抽出結果の構造化保存と解析履歴の Inertia.js ページ表示
+
+Inertia.js の Rails アダプタについては [inertiajs/inertia-rails](https://github.com/inertiajs/inertia-rails) を参照してください。
 
 ## 開発
 

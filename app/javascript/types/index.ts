@@ -68,5 +68,16 @@ export interface ReceiptsIndexProps extends SharedProps {
   errors?: Record<string, string>;
 }
 
+export interface HomeLink {
+  name: string;
+  description: string;
+  href: string;
+  icon?: string;
+}
+
+export interface HomeIndexProps extends SharedProps {
+  links: HomeLink[];
+}
+
 export type InertiaPage<T extends PageProps = PageProps> = Page<T>;
 

@@ -12,5 +12,5 @@ Rails.application.routes.draw do
   resources :receipts, only: %i[index create]
   resources :todos, except: %i[new edit]
 
-  root "todos#index"
+  root "home#index"
 end

@@ -1,12 +1,14 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
+import HomeIndex from "./Pages/Home/Index";
 import ReceiptsIndex from "./Pages/Receipts/Index";
 import TodosIndex from "./Pages/Todos/Index";
 
 const appName = "Inertia Playground";
 
 const pages = {
+  "Home/Index": HomeIndex,
   "Receipts/Index": ReceiptsIndex,
   "Todos/Index": TodosIndex,
 };
