@@ -7,6 +7,8 @@ services:
       - .:/app:cached
       - bundle:/app/vendor/bundle
       - bun:/usr/local/bun
+    env_file:
+      - .env
     environment:
       - BUNDLE_PATH=vendor/bundle
       - BUNDLE_CONFIG=vendor/.bundle/config
@@ -16,7 +18,7 @@ services:
       - "3030:3000"
     stdin_open: true
     tty: true
-    command: bin/dev
+    command: sh -c "bundle install && bin/dev"
 
 volumes:
   bundle:
