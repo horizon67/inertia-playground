@@ -38,7 +38,7 @@ export default function DemosPartialReloads({
       preserveScroll: true,
       preserveState: true,
       replace: true,
-      only: ["posts", "posts_loaded_at"],
+      only: ["posts", "posts_loaded_at", "filters"],
     });
   };
 
