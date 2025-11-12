@@ -12,5 +12,8 @@ Rails.application.routes.draw do
   resources :receipts, only: %i[index create]
   resources :todos, except: %i[new edit]
 
+  get "demos/partial-reloads", to: "demos#partial_reloads", as: :demos_partial_reloads
+  get "demos/deferred-props", to: "demos#deferred_props", as: :demos_deferred_props
+
   root "home#index"
 end

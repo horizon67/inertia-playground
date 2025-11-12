@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_070758) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_090000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -83,6 +83,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_070758) do
     t.index ["family"], name: "index_models_on_family"
     t.index ["provider", "model_id"], name: "index_models_on_provider_and_model_id", unique: true
     t.index ["provider"], name: "index_models_on_provider"
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "category", null: false
+    t.text "body"
+    t.date "published_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category"], name: "index_posts_on_category"
+    t.index ["published_on"], name: "index_posts_on_published_on"
   end
 
   create_table "receipt_line_items", force: :cascade do |t|

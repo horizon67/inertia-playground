@@ -18,7 +18,7 @@ services:
       - "3030:3000"
     stdin_open: true
     tty: true
-    command: sh -c "bundle install && bin/dev"
+    command: sh -c "bundle install && bin/rails db:prepare && bin/rails db:seed && bin/dev"
 
 volumes:
   bundle:

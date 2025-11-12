@@ -79,5 +79,47 @@ export interface HomeIndexProps extends SharedProps {
   links: HomeLink[];
 }
 
+export interface DemoPost {
+  id: number;
+  title: string;
+  category: string;
+  body?: string | null;
+  published_on?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DemosPartialReloadsProps extends SharedProps {
+  filters: {
+    category?: string | null;
+  };
+  posts: DemoPost[];
+  posts_loaded_at: string;
+  categories: string[];
+  categories_loaded_at: string;
+  total_posts: number;
+}
+
+export interface DemoStats {
+  total_posts: number;
+  categories: number;
+  latest_published_on?: string | null;
+  most_recent_created_at?: string | null;
+}
+
+export interface DemoCategoryBreakdownItem {
+  category: string;
+  count: number;
+  percentage: number;
+}
+
+export interface DemosDeferredPropsProps extends SharedProps {
+  posts: DemoPost[];
+  posts_loaded_at: string;
+  stats?: DemoStats;
+  stats_generated_at?: string;
+  category_breakdown?: DemoCategoryBreakdownItem[];
+}
+
 export type InertiaPage<T extends PageProps = PageProps> = Page<T>;
 

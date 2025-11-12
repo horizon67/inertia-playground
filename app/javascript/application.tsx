@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
 import HomeIndex from "./Pages/Home/Index";
+import DemosDeferredProps from "./Pages/Demos/DeferredProps";
+import DemosPartialReloads from "./Pages/Demos/PartialReloads";
 import ReceiptsIndex from "./Pages/Receipts/Index";
 import TodosIndex from "./Pages/Todos/Index";
 
@@ -11,6 +13,8 @@ const pages = {
   "Home/Index": HomeIndex,
   "Receipts/Index": ReceiptsIndex,
   "Todos/Index": TodosIndex,
+  "Demos/PartialReloads": DemosPartialReloads,
+  "Demos/DeferredProps": DemosDeferredProps,
 };
 
 createInertiaApp({

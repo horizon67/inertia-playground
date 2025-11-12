@@ -1,0 +1,122 @@
+# Post fixtures for demo data
+
+one:
+  title: "Rails 8の新機能を徹底解説"
+  category: "技術"
+  body: "Rails 8で導入された新機能について、実践的な例を交えながら詳しく解説します。特にInertia.jsとの統合についても触れます。"
+  published_on: <%= 5.days.ago.to_date %>
+
+two:
+  title: "React Hooksのベストプラクティス"
+  category: "技術"
+  body: "useState、useEffect、カスタムフックなど、React Hooksを効果的に使うための実践的なテクニックを紹介します。"
+  published_on: <%= 10.days.ago.to_date %>
+
+three:
+  title: "朝活のススメ"
+  category: "ライフスタイル"
+  body: "早起きして朝の時間を有効活用する方法について。生産性向上のための朝のルーティン作りを解説します。"
+  published_on: <%= 3.days.ago.to_date %>
+
+four:
+  title: "京都の紅葉スポット5選"
+  category: "旅行"
+  body: "秋の京都で訪れたい紅葉の名所を厳選して紹介。混雑を避けるタイミングやアクセス方法も詳しく解説します。"
+  published_on: <%= 7.days.ago.to_date %>
+
+five:
+  title: "簡単に作れるパスタレシピ"
+  category: "料理"
+  body: "忙しい日でも15分で作れる、シンプルで美味しいパスタのレシピを3つ紹介します。"
+  published_on: <%= 2.days.ago.to_date %>
+
+six:
+  title: "TypeScript入門ガイド"
+  category: "技術"
+  body: "JavaScriptからTypeScriptへの移行方法と、型安全性を活かした開発の基礎を学びます。"
+  published_on: <%= 14.days.ago.to_date %>
+
+seven:
+  title: "読書習慣の作り方"
+  category: "読書"
+  body: "忙しい毎日でも読書を続けるためのコツと、効率的な読書方法について実体験を交えて紹介します。"
+  published_on: <%= 1.day.ago.to_date %>
+
+eight:
+  title: "沖縄旅行の完全ガイド"
+  category: "旅行"
+  body: "初めての沖縄旅行で押さえておきたい観光スポット、グルメ、お土産情報をまとめました。"
+  published_on: <%= 6.days.ago.to_date %>
+
+nine:
+  title: "Docker Composeで開発環境を構築"
+  category: "技術"
+  body: "RailsアプリケーションをDocker Composeで動かす方法を、初心者向けに丁寧に解説します。"
+  published_on: <%= 12.days.ago.to_date %>
+
+ten:
+  title: "健康的な食事のバランス"
+  category: "料理"
+  body: "栄養バランスを考えた食事の取り方と、簡単に実践できるレシピのアイデアを紹介します。"
+  published_on: <%= 4.days.ago.to_date %>
+
+eleven:
+  title: "Inertia.jsでSPA体験を実現"
+  category: "技術"
+  body: "RailsとReactを組み合わせたInertia.jsの使い方と、従来のSPA開発との違いについて解説します。"
+  published_on: <%= 8.days.ago.to_date %>
+
+twelve:
+  title: "週末の過ごし方アイデア"
+  category: "ライフスタイル"
+  body: "充実した週末を過ごすためのアイデア集。リフレッシュと自己投資のバランスを考えた過ごし方を提案します。"
+  published_on: <%= 11.days.ago.to_date %>
+
+thirteen:
+  title: "北海道の冬の楽しみ方"
+  category: "旅行"
+  body: "雪景色と温泉が楽しめる北海道の冬の観光スポットと、防寒対策について詳しく紹介します。"
+  published_on: <%= 15.days.ago.to_date %>
+
+fourteen:
+  title: "Rubyのメタプログラミング入門"
+  category: "技術"
+  body: "Rubyの強力な機能であるメタプログラミングの基礎と、実践的な活用例を紹介します。"
+  published_on: <%= 9.days.ago.to_date %>
+
+fifteen:
+  title: "おすすめのビジネス書5冊"
+  category: "読書"
+  body: "2024年に読んでおきたいビジネス書を厳選。それぞれの本の要点と、実践への活かし方を解説します。"
+  published_on: <%= 13.days.ago.to_date %>
+
+sixteen:
+  title: "手作りパンの基本"
+  category: "料理"
+  body: "初心者でも失敗しないパン作りのコツと、基本のレシピを写真付きで詳しく解説します。"
+  published_on: <%= 16.days.ago.to_date %>
+
+seventeen:
+  title: "Tailwind CSSで効率的なスタイリング"
+  category: "技術"
+  body: "ユーティリティファーストのTailwind CSSを使った、効率的なスタイリング手法を実例と共に紹介します。"
+  published_on: <%= 17.days.ago.to_date %>
+
+eighteen:
+  title: "ワークライフバランスの取り方"
+  category: "ライフスタイル"
+  body: "仕事とプライベートのバランスを保つための具体的な方法と、時間管理のコツについて解説します。"
+  published_on: <%= 18.days.ago.to_date %>
+
+nineteen:
+  title: "ヨーロッパ旅行の計画の立て方"
+  category: "旅行"
+  body: "初めてのヨーロッパ旅行で失敗しないための、予算計画やスケジュールの組み方について実体験を交えて紹介します。"
+  published_on: <%= 19.days.ago.to_date %>
+
+twenty:
+  title: "小説の読み方と楽しみ方"
+  category: "読書"
+  body: "小説をより深く楽しむための読み方のコツと、おすすめの作品をジャンル別に紹介します。"
+  published_on: <%= 20.days.ago.to_date %>
+
