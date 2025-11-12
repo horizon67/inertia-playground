@@ -1,0 +1,157 @@
+# Prompt Templates Fixtures
+
+default_receipt:
+  name: "デフォルトレシート解析プロンプト"
+  category: "receipt"
+  content: |
+    添付した画像はレシートです。
+    店舗名、取引日時、合計金額、税額、通貨、支払方法、
+    明細（品目名・数量・単価・小計）を日本語で正確に読み取り、
+    JSON 形式で構造化してください。
+    数値は半角の数値で返し、不明な場合は null を使用してください。
+    明細の数量が不明な場合は 1 を設定してください。
+  enabled: true
+  version: 1
+  is_default: true
+  metadata:
+    description: "レシート画像を解析してJSON形式で構造化するための標準プロンプト"
+    created_by: "system"
+    fields:
+      - "店舗名"
+      - "取引日時"
+      - "合計金額"
+      - "税額"
+      - "通貨"
+      - "支払方法"
+      - "明細"
+
+detailed_receipt:
+  name: "詳細レシート解析プロンプト"
+  category: "receipt"
+  content: |
+    添付した画像はレシートです。以下の情報を読み取ってください。
+
+    【必須項目】
+    - 店舗名：レシート上部の店名
+    - 取引日時：YYYY-MM-DD HH:MM:SS形式で
+    - 合計金額：税込み合計
+    - 税額：消費税額
+    
+    【任意項目】
+    - 通貨：JPY/USD等（不明な場合はJPY）
+    - 支払方法：現金/クレジットカード等
+    
+    【明細】各商品について：
+    - 品目名：正確な商品名
+    - 数量：不明な場合は1
+    - 単価：1個あたりの価格
+    - 小計：数量×単価
+    
+    以下のJSONフォーマットで返してください：
+    {
+      "店舗名": "...",
+      "取引日時": "YYYY-MM-DD HH:MM:SS",
+      "合計金額": 1234,
+      "税額": 123,
+      "通貨": "JPY",
+      "支払方法": "...",
+      "明細": [
+        {
+          "品目名": "...",
+          "数量": 1,
+          "単価": 100,
+          "小計": 100
+        }
+      ]
+    }
+    
+    注意：数値は半角数字で、不明な項目はnullにしてください。
+  enabled: true
+  version: 1
+  is_default: false
+  metadata:
+    description: "詳細な指示とフォーマット例を含むレシート解析プロンプト"
+    created_by: "system"
+    fields:
+      - "店舗名"
+      - "取引日時"
+      - "合計金額"
+      - "税額"
+      - "通貨"
+      - "支払方法"
+      - "明細"
+    features:
+      - "format_example"
+      - "detailed_instructions"
+
+english_receipt:
+  name: "英語レシート解析プロンプト"
+  category: "receipt"
+  content: |
+    The attached image is a receipt. Please extract the following information:
+    
+    - Store name
+    - Transaction date and time
+    - Total amount (including tax)
+    - Tax amount
+    - Currency
+    - Payment method
+    - Line items (item name, quantity, unit price, subtotal)
+    
+    Return the data in JSON format with keys in Japanese:
+    {
+      "店舗名": "...",
+      "取引日時": "YYYY-MM-DD HH:MM:SS",
+      "合計金額": 1234,
+      "税額": 123,
+      "通貨": "USD",
+      "支払方法": "...",
+      "明細": [
+        {
+          "品目名": "...",
+          "数量": 1,
+          "単価": 100,
+          "小計": 100
+        }
+      ]
+    }
+    
+    Use null for unknown values. Set quantity to 1 if not specified.
+  enabled: true
+  version: 1
+  is_default: false
+  metadata:
+    description: "英語のレシートを解析するためのプロンプト"
+    created_by: "system"
+    language: "en"
+    output_language: "ja"
+    fields:
+      - "店舗名"
+      - "取引日時"
+      - "合計金額"
+      - "税額"
+      - "通貨"
+      - "支払方法"
+      - "明細"
+
+minimal_receipt:
+  name: "最小限レシート解析プロンプト"
+  category: "receipt"
+  content: |
+    レシートから店舗名、日時、合計金額のみを抽出してJSONで返してください：
+    {
+      "店舗名": "...",
+      "取引日時": "YYYY-MM-DD HH:MM:SS",
+      "合計金額": 1234
+    }
+  enabled: true
+  version: 1
+  is_default: false
+  metadata:
+    description: "必要最小限の情報のみを抽出する高速処理用プロンプト"
+    created_by: "system"
+    processing_type: "minimal"
+    fields:
+      - "店舗名"
+      - "取引日時"
+      - "合計金額"

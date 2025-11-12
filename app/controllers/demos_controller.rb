@@ -14,13 +14,13 @@ class DemosController < ApplicationController
   def partial_reload_props
     {
       filters: {
-        category: category_param,
+        category: category_param
       },
       posts: -> { serialize_posts(partial_posts_scope) },
       posts_loaded_at: -> { Time.zone.now.iso8601 },
       categories: -> { Post.order(:category).distinct.pluck(:category) },
       categories_loaded_at: -> { Time.zone.now.iso8601 },
-      total_posts: -> { Post.count },
+      total_posts: -> { Post.count }
     }
   end
 
@@ -30,7 +30,7 @@ class DemosController < ApplicationController
       posts_loaded_at: -> { Time.zone.now.iso8601 },
       stats: InertiaRails.defer { build_stats_payload },
       stats_generated_at: InertiaRails.defer { Time.zone.now.iso8601 },
-      category_breakdown: InertiaRails.defer(group: "insights") { build_category_breakdown },
+      category_breakdown: InertiaRails.defer(group: "insights") { build_category_breakdown }
     }
   end
 
@@ -51,7 +51,7 @@ class DemosController < ApplicationController
         body: post.body,
         published_on: post.published_on&.iso8601,
         created_at: post.created_at.iso8601,
-        updated_at: post.updated_at.iso8601,
+        updated_at: post.updated_at.iso8601
       }
     end
   end
@@ -63,7 +63,7 @@ class DemosController < ApplicationController
       total_posts: Post.count,
       categories: Post.distinct.count(:category),
       latest_published_on: Post.maximum(:published_on)&.iso8601,
-      most_recent_created_at: Post.maximum(:created_at)&.iso8601,
+      most_recent_created_at: Post.maximum(:created_at)&.iso8601
     }
   end
 
@@ -73,11 +73,11 @@ class DemosController < ApplicationController
     totals = Post.group(:category).count
     total_posts = totals.values.sum
 
-    totals.sort_by { |category, count| [-count, category] }.map do |category, count|
+    totals.sort_by { |category, count| [ -count, category ] }.map do |category, count|
       {
         category:,
         count:,
-        percentage: total_posts.zero? ? 0.0 : ((count.to_f / total_posts) * 100).round(1),
+        percentage: total_posts.zero? ? 0.0 : ((count.to_f / total_posts) * 100).round(1)
       }
     end
   end

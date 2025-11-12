@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_11_090000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_12_014218) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -96,6 +96,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_090000) do
     t.index ["published_on"], name: "index_posts_on_published_on"
   end
 
+  create_table "prompt_templates", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.text "content"
+    t.boolean "enabled"
+    t.integer "version"
+    t.boolean "is_default"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enabled"], name: "index_prompt_templates_on_enabled"
+    t.index ["is_default"], name: "index_prompt_templates_on_is_default"
+    t.index ["name"], name: "index_prompt_templates_on_name", unique: true
+  end
+
   create_table "receipt_line_items", force: :cascade do |t|
     t.integer "receipt_id", null: false
     t.string "name"
@@ -122,8 +137,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_090000) do
     t.json "raw_response", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "confidence_score"
+    t.json "analysis_metadata"
+    t.integer "prompt_template_id"
     t.index ["analysis_message_id"], name: "index_receipts_on_analysis_message_id"
     t.index ["chat_id"], name: "index_receipts_on_chat_id"
+    t.index ["prompt_template_id"], name: "index_receipts_on_prompt_template_id"
   end
 
   create_table "todos", force: :cascade do |t|
@@ -156,5 +175,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_090000) do
   add_foreign_key "receipt_line_items", "receipts"
   add_foreign_key "receipts", "chats"
   add_foreign_key "receipts", "messages", column: "analysis_message_id"
+  add_foreign_key "receipts", "prompt_templates"
   add_foreign_key "tool_calls", "messages"
 end

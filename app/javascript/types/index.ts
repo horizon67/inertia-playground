@@ -54,6 +54,13 @@ export interface Receipt {
   payment_method: string | null;
   raw_text?: string | null;
   raw_response?: Record<string, unknown>;
+  confidence_score?: number | null;
+  confidence_level?: "high" | "medium" | "low" | "very_low" | null;
+  confidence_level_label?: string | null;
+  confidence_score_breakdown?: Record<string, number> | null;
+  analysis_metadata?: Record<string, unknown> | null;
+  prompt_template_id?: number | null;
+  prompt_template_name?: string | null;
   chat_id: number;
   analysis_message_id: number | null;
   model?: string | null;

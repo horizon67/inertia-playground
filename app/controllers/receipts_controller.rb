@@ -9,7 +9,12 @@ class ReceiptsController < ApplicationController
 
   def create
     image_param = receipt_image_param
-    analyzer = Receipts::Analyzer.new(image: image_param)
+    prompt_template_id = params[:prompt_template_id]
+
+    analyzer = Receipts::Analyzer.new(
+      image: image_param,
+      prompt_template_id: prompt_template_id
+    )
     result = analyzer.call
 
     receipt = build_receipt(result)
@@ -68,9 +73,13 @@ class ReceiptsController < ApplicationController
     raw_text = result.raw_text || assistant_message&.content
     data = result.data || {}
 
+    # 解析メタデータを抽出（内部メタデータは除外）
+    analysis_metadata = data.delete("_analysis_metadata") || {}
+
     Receipt.new(
       chat: result.chat,
       analysis_message: assistant_message,
+      prompt_template: result.prompt_template,
       store_name: data["店舗名"] || data["store_name"],
       transaction_at: parse_datetime(data["取引日時"] || data["transaction_datetime"]),
       transaction_at_raw: data["取引日時"] || data["transaction_datetime"],
@@ -79,7 +88,8 @@ class ReceiptsController < ApplicationController
       currency: data["通貨"] || data["currency"],
       payment_method: data["支払方法"] || data["payment_method"],
       raw_text: raw_text,
-      raw_response: data.as_json
+      raw_response: data.as_json,
+      analysis_metadata: analysis_metadata
     ).tap do |receipt|
       Array.wrap(data["明細"] || data["line_items"]).each do |item|
         name = item["品目名"] || item["name"]
@@ -156,6 +166,16 @@ class ReceiptsController < ApplicationController
       model_id: receipt.chat&.model&.model_id,
       created_at: receipt.created_at.iso8601,
       image_url: receipt.image.attached? ? url_for(receipt.image) : nil,
+      # スコアリング関連情報
+      confidence_score: receipt.confidence_score&.round(1),
+      confidence_level: receipt.confidence_level,
+      confidence_level_label: receipt.confidence_level_label,
+      confidence_score_breakdown: receipt.confidence_score_breakdown,
+      analysis_metadata: receipt.analysis_metadata,
+      # プロンプトテンプレート情報
+      prompt_template_id: receipt.prompt_template_id,
+      prompt_template_name: receipt.prompt_template&.name,
+      # 明細
       line_items: receipt.line_items.map do |item|
         {
           id: item.id,

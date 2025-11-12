@@ -14,11 +14,12 @@ module Receipts
       明細の数量が不明な場合は 1 を設定してください。
     PROMPT
 
-    Result = Struct.new(:chat, :assistant_message, :data, :raw_text, keyword_init: true)
+    Result = Struct.new(:chat, :assistant_message, :data, :raw_text, :prompt_template, keyword_init: true)
 
-    def initialize(image:, prompt: DEFAULT_PROMPT, chat: nil, model: nil)
+    def initialize(image:, prompt: nil, prompt_template_id: nil, chat: nil, model: nil)
       @image = image
-      @prompt = prompt
+      @prompt_template = load_prompt_template(prompt_template_id)
+      @prompt = prompt || @prompt_template&.content || DEFAULT_PROMPT
       @chat = chat || ::Chat.create!
       @model = model
     end
@@ -28,6 +29,9 @@ module Receipts
 
       chat.with_model(@model, assume_exists: true) if @model.present?
 
+      # 解析前のメタデータを準備
+      start_time = Time.current
+
       response = chat.ask(@prompt, with: image)
       assistant_message = chat.messages.order(:created_at).last
 
@@ -36,14 +40,28 @@ module Receipts
 
       data = normalize_payload(raw_payload || raw_text)
 
-      Result.new(chat:, assistant_message:, data:, raw_text:)
+      # 解析時間を記録
+      data["_analysis_metadata"] = {
+        "duration_seconds" => (Time.current - start_time).round(2),
+        "prompt_template_id" => @prompt_template&.id,
+        "prompt_template_name" => @prompt_template&.name,
+        "model" => @model || chat.model&.model_id
+      }
+
+      Result.new(
+        chat:,
+        assistant_message:,
+        data:,
+        raw_text:,
+        prompt_template: @prompt_template
+      )
     rescue JSON::ParserError => e
       raise ParsingError, "JSONの解析に失敗しました: #{e.message}"
     end
 
     private
 
-    attr_reader :chat, :image
+    attr_reader :chat, :image, :prompt_template
 
     def ensure_image!
       return if image.present?
@@ -86,6 +104,14 @@ module Receipts
       true
     rescue JSON::ParserError
       false
+    end
+
+    def load_prompt_template(template_id)
+      return nil unless template_id
+
+      ::PromptTemplate.enabled.find_by(id: template_id)
+    rescue ActiveRecord::RecordNotFound
+      nil
     end
   end
 end

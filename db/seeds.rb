@@ -7,11 +7,21 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+require "active_record/fixtures"
+fixtures_path = Rails.root.join("test", "fixtures")
+
 # Load Post fixtures
 if Post.count.zero?
-  require "active_record/fixtures"
-
-  fixtures_path = Rails.root.join("test", "fixtures")
   ActiveRecord::FixtureSet.create_fixtures(fixtures_path, "posts")
   puts "Loaded #{Post.count} posts from fixtures"
+end
+
+# Load Prompt Template fixtures
+if PromptTemplate.count.zero?
+  ActiveRecord::FixtureSet.create_fixtures(fixtures_path, "prompt_templates")
+  puts "Loaded #{PromptTemplate.count} prompt templates from fixtures"
+
+  # デフォルトテンプレートの確認
+  default_template = PromptTemplate.find_by(is_default: true, category: "receipt")
+  puts "Default receipt template: #{default_template&.name}" if default_template
 end

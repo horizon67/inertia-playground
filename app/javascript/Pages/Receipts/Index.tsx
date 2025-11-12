@@ -220,6 +220,13 @@ function ReceiptCard({ receipt }: ReceiptCardProps) {
                   {receipt.model}
                 </span>
               )}
+              {typeof receipt.confidence_score === "number" && (
+                <ConfidenceBadge
+                  level={receipt.confidence_level}
+                  label={receipt.confidence_level_label}
+                  score={receipt.confidence_score}
+                />
+              )}
             </div>
             <p className="mt-1 text-sm text-slate-400">
               解析日時: {formatDate(receipt.created_at)} / 取引日時:{" "}
@@ -233,6 +240,8 @@ function ReceiptCard({ receipt }: ReceiptCardProps) {
             <InfoItem label="通貨" value={receipt.currency_label || receipt.currency || "不明"} />
             <InfoItem label="支払方法" value={receipt.payment_method || "不明"} />
           </div>
+
+          <ConfidenceScoreSection receipt={receipt} />
 
           <div>
             <h4 className="text-sm font-semibold text-slate-200">明細</h4>
@@ -300,6 +309,86 @@ function ReceiptCard({ receipt }: ReceiptCardProps) {
   );
 }
 
+type ConfidenceBadgeProps = {
+  level: Receipt["confidence_level"];
+  label?: string | null;
+  score: number;
+};
+
+function ConfidenceBadge({ level, label, score }: ConfidenceBadgeProps) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${getConfidenceClasses(level)}`}
+    >
+      <span>{label || "信頼度"}</span>
+      <span className="text-sm">{score.toFixed(1)}%</span>
+    </span>
+  );
+}
+
+type ConfidenceScoreSectionProps = {
+  receipt: Receipt;
+};
+
+function ConfidenceScoreSection({ receipt }: ConfidenceScoreSectionProps) {
+  if (receipt.confidence_score == null) {
+    return null;
+  }
+
+  const breakdownEntries = Object.entries(receipt.confidence_score_breakdown ?? {});
+  const metadata = (receipt.analysis_metadata ?? {}) as Record<string, unknown>;
+  const durationValue = metadata.duration_seconds;
+  const duration =
+    typeof durationValue === "number"
+      ? durationValue
+      : typeof durationValue === "string" && durationValue.trim() !== ""
+        ? Number(durationValue)
+        : null;
+  const model = typeof metadata.model === "string" ? metadata.model : null;
+  const promptTemplateName = receipt.prompt_template_name;
+  const promptTemplateId =
+    typeof metadata.prompt_template_id === "number" ? metadata.prompt_template_id : receipt.prompt_template_id;
+
+  return (
+    <section className="mt-4 space-y-4 rounded-xl border border-slate-800/80 bg-slate-900/40 p-5">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">解析信頼度</p>
+          <div className="mt-2 flex flex-wrap items-end gap-3">
+            <span className="text-3xl font-bold text-slate-50">{receipt.confidence_score.toFixed(1)}%</span>
+            <ConfidenceBadge level={receipt.confidence_level} label={receipt.confidence_level_label} score={receipt.confidence_score} />
+          </div>
+          <div className="mt-2 space-y-1 text-xs text-slate-400">
+            {promptTemplateName && <p>プロンプト: {promptTemplateName}</p>}
+            {model && <p>モデル: {model}</p>}
+            {Number.isFinite(duration) && duration !== null && <p>解析時間: {duration.toFixed(2)} 秒</p>}
+          </div>
+        </div>
+        {(promptTemplateId || duration !== null || model) && (
+          <div className="space-y-1 text-right text-xs text-slate-400">
+            {promptTemplateId && <p>テンプレートID: {promptTemplateId}</p>}
+            {receipt.chat_id && <p>Chat ID: {receipt.chat_id}</p>}
+          </div>
+        )}
+      </div>
+
+      {breakdownEntries.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {breakdownEntries.map(([key, value]) => (
+            <div
+              key={key}
+              className="rounded-lg border border-slate-800/70 bg-slate-900/50 p-3 transition hover:border-sky-500/40"
+            >
+              <p className="text-xs uppercase tracking-wide text-slate-400">{confidenceMetricLabel(key)}</p>
+              <p className="mt-1 text-lg font-semibold text-slate-100">{value}点</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 type InfoItemProps = {
   label: string;
   value: string;
@@ -324,5 +413,33 @@ function formatAmount(formatter: Intl.NumberFormat, value: number | null | undef
   } catch {
     return value.toString();
   }
+}
+
+function getConfidenceClasses(level: Receipt["confidence_level"]): string {
+  switch (level) {
+    case "high":
+      return "border border-emerald-500/40 bg-emerald-500/15 text-emerald-200";
+    case "medium":
+      return "border border-amber-500/40 bg-amber-500/15 text-amber-200";
+    case "low":
+      return "border border-orange-500/40 bg-orange-500/15 text-orange-200";
+    case "very_low":
+      return "border border-rose-500/40 bg-rose-500/15 text-rose-200";
+    default:
+      return "border border-slate-700 bg-slate-800/70 text-slate-300";
+  }
+}
+
+function confidenceMetricLabel(key: string): string {
+  const labels: Record<string, string> = {
+    store_name: "店舗名の有無",
+    total_amount: "合計金額の有無",
+    transaction_at: "取引日時の有無",
+    amount_consistency: "金額の整合性",
+    line_items_completeness: "明細の充実度",
+    tax_validity: "税額の妥当性",
+  };
+
+  return labels[key] || key;
 }
 
